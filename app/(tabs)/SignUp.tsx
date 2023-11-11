@@ -1,17 +1,11 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  ActivityIndicator,
-  ImageBackground,
-  Image,
-} from "react-native";
-import { router } from "expo-router";
+import { StyleSheet, Text, View, TextInput, Button, Image } from "react-native";
+import PasswordInput from "../../components/PasswordInput";
+import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export default function TabOneScreen() {
+
+export default function SignUp({navigation}: NativeStackScreenProps<any, any>) {
   const [name, setName] = useState("");
   const nameParts = name.split(" ");
   const [email, setEmail] = useState("");
@@ -97,21 +91,21 @@ export default function TabOneScreen() {
 
     setTimeout(() => {
       setLoading(false);
-      router.replace("/two");
+      navigation.navigate('SignIn')
     }, 2000);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.headerSignUp}>
-        <Image
+        {/* <Image
           style={styles.topImage}
-          source={require("../../assets/images/teste.png")}
-        />
-        <Image
+          source={require("../assets/images/teste.png")}
+        /> */}
+        {/* <Image
           style={styles.logo}
           source={require("../../assets/images/logo.png")}
-        />
+        /> */}
       </View>
       <View style={styles.footerSignUp}>
         <Text style={styles.textOne}>Cadastre-se</Text>
@@ -129,13 +123,12 @@ export default function TabOneScreen() {
             onChangeText={handleEmail}
             placeholder="E-mail"
           />
-          <TextInput
-            style={styles.input}
-            secureTextEntry
-            value={password}
-            onChangeText={handlePassword}
+          <PasswordInput
             placeholder="Senha"
-            autoCapitalize="none"
+            onChange={handlePassword}
+            leftIcon={<Ionicons name="lock-closed" size={24} color="black" />}
+            rightIconHide={<Ionicons name="eye" size={24} color="black" />}
+            rightIconShow={<Ionicons name="eye-off" size={24} color="black" />}
           />
         </View>
         <Text>{error}</Text>
@@ -145,7 +138,6 @@ export default function TabOneScreen() {
             disabled={loading}
             title={loading ? "" : "Registrar"}
           />
-          {loading && <ActivityIndicator />}
         </View>
       </View>
     </View>
@@ -158,7 +150,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    height: '100%'
+    height: "100%",
   },
   headerSignUp: {
     width: "100%",
@@ -173,18 +165,26 @@ const styles = StyleSheet.create({
   footerSignUp: {
     flex: 1,
     marginTop: 40,
-    width: '90%',
-    alignItems: 'center',
+    width: "90%",
+    alignItems: "center",
   },
   inputs: {
     width: "100%",
   },
   input: {
     height: 50,
-    backgroundColor: 'gray',
+    backgroundColor: "#f7f7f7",
     borderRadius: 50,
     marginBottom: 10,
-    paddingLeft: 10,
+    paddingLeft: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 1,
   },
   buttonContainer: {
     marginTop: 20,
