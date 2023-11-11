@@ -98,14 +98,14 @@ export default function SignUp({navigation}: NativeStackScreenProps<any, any>) {
   return (
     <View style={styles.container}>
       <View style={styles.headerSignUp}>
-        {/* <Image
+        <Image
           style={styles.topImage}
-          source={require("../assets/images/teste.png")}
-        /> */}
-        {/* <Image
+          source={require("../../assets/images/teste.png")}
+        />
+        <Image
           style={styles.logo}
           source={require("../../assets/images/logo.png")}
-        /> */}
+        />
       </View>
       <View style={styles.footerSignUp}>
         <Text style={styles.textOne}>Cadastre-se</Text>
