@@ -7,32 +7,17 @@ import {
   StyleSheet,
 } from "react-native";
 
-export default function PasswordInput({
-  placeholder,
-  onChange,
-  leftIcon,
-  rightIconShow,
-  rightIconHide,
-}) {
-  const [showPassword, setShowPassword] = useState(false);
-  
+export default function TextInputField({ placeholder, onChange, leftIcon }) {
   return (
     <View style={styles.container}>
       {leftIcon && <View style={styles.leftIconContainer}>{leftIcon}</View>}
       <TextInput
-        autoCapitalize={'none'}
+        autoCapitalize={"none"}
         style={styles.textInput}
-        secureTextEntry={!showPassword}
         placeholder={placeholder}
         onChangeText={(text) => onChange(text)}
         placeholderTextColor="#718096"
       />
-      <TouchableOpacity
-        onPress={() => setShowPassword(!showPassword)}
-        style={styles.rightIconContainer}
-      >
-        {showPassword ? rightIconShow : rightIconHide}
-      </TouchableOpacity>
     </View>
   );
 }
@@ -47,7 +32,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 1,
     top: 12,
-    left: 15
+    left: 15,
   },
   rightIconContainer: {
     position: "absolute",
@@ -58,7 +43,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: "#f7f7f7",
     borderRadius: 50,
-    marginBottom: 20,
+    marginBottom: 10,
     paddingLeft: 45,
     shadowColor: "#000",
     shadowOffset: {
