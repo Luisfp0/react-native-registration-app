@@ -6,6 +6,8 @@ import {
   TextInput,
   Button,
   ActivityIndicator,
+  ImageBackground,
+  Image,
 } from "react-native";
 import { router } from "expo-router";
 
@@ -101,38 +103,50 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textOne}>Cadastre-se</Text>
-      <View style={styles.insideContainer}>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={handleName}
-          placeholder="Nome Completo"
+      <View style={styles.headerSignUp}>
+        <Image
+          style={styles.topImage}
+          source={require("../../assets/images/teste.png")}
         />
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          value={email}
-          onChangeText={handleEmail}
-          placeholder="E-mail"
-        />
-        <TextInput
-          style={styles.input}
-          secureTextEntry
-          value={password}
-          onChangeText={handlePassword}
-          placeholder="Senha"
-          autoCapitalize="none"
+        <Image
+          style={styles.logo}
+          source={require("../../assets/images/logo.png")}
         />
       </View>
-      <Text>{error}</Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          onPress={createAccount}
-          disabled={loading}
-          title={loading ? "" : "Registrar"}
-        />
-        {loading && <ActivityIndicator />}
+      <View style={styles.footerSignUp}>
+        <Text style={styles.textOne}>Cadastre-se</Text>
+        <View style={styles.inputs}>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={handleName}
+            placeholder="Nome Completo"
+          />
+          <TextInput
+            autoCapitalize="none"
+            style={styles.input}
+            value={email}
+            onChangeText={handleEmail}
+            placeholder="E-mail"
+          />
+          <TextInput
+            style={styles.input}
+            secureTextEntry
+            value={password}
+            onChangeText={handlePassword}
+            placeholder="Senha"
+            autoCapitalize="none"
+          />
+        </View>
+        <Text>{error}</Text>
+        <View style={styles.buttonContainer}>
+          <Button
+            onPress={createAccount}
+            disabled={loading}
+            title={loading ? "" : "Registrar"}
+          />
+          {loading && <ActivityIndicator />}
+        </View>
       </View>
     </View>
   );
@@ -140,29 +154,50 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "green",
+    backgroundColor: "white",
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    height: '100%'
+  },
+  headerSignUp: {
     width: "100%",
-    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   textOne: {
     marginBottom: 20,
     fontSize: 20,
     color: "black",
   },
-  insideContainer: {
-    marginBottom: 10,
+  footerSignUp: {
+    flex: 1,
+    marginTop: 40,
+    width: '90%',
+    alignItems: 'center',
+  },
+  inputs: {
     width: "100%",
   },
   input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
+    height: 50,
+    backgroundColor: 'gray',
+    borderRadius: 50,
     marginBottom: 10,
-    paddingHorizontal: 8,
+    paddingLeft: 10,
   },
   buttonContainer: {
     marginTop: 20,
+  },
+  topImage: {
+    width: "95%",
+    height: 390,
+    resizeMode: "contain",
+  },
+  logo: {
+    position: "absolute",
+    top: 80,
+    width: 250,
+    height: 150,
   },
 });
