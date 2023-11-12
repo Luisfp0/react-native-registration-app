@@ -2,7 +2,7 @@
 
 <h2> :writing_hand:Descrição</h1>
 
-O projeto é um aplicativo móvel desenvolvido em React Native, utilizando a biblioteca Expo. Ele oferece funcionalidades de autenticação, permitindo que os usuários realizem login, criem contas e acessem seus perfis. A navegação entre telas é gerenciada pelo React Navigation.
+O projeto é um aplicativo móvel desenvolvido em React Native, utilizando a biblioteca Expo. Ele oferece funcionalidades de autenticação, permitindo que os usuários realizem login, criem contas e acessem seus perfis. A navegação entre telas é gerenciada pelo React Navigation. Para o backend foi utilizado o supabase, pois já tenho familiaridade com o seu funcionamento e ele dipõe de banco de dados e do storage para salvar arquivos.
 
 <h1 > :gear: Funcionalidades Principais</h1>
 
