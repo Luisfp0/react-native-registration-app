@@ -6,7 +6,10 @@ import { supabase } from "../../config/initSupabase";
 const ProfileScreen = ({ navigation }) => {
   const { user, logout } = useUser();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const userName = verifyUserExists(user?.email);
+  }, []);
+
   async function verifyUserExists(email: string | undefined) {
     const { data } = await supabase
       .from("users")
