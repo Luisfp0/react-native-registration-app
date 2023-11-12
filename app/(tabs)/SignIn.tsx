@@ -11,6 +11,7 @@ import { Logo } from "../../components/Logo";
 import { Button } from "../../components/Button";
 import { RootStackParamList } from "../../navigation/types";
 import { validateEmail } from "../../utils/email";
+import { useUser } from "./UserContext";
 
 export default function SignIn({
   navigation,
@@ -20,6 +21,7 @@ export default function SignIn({
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { login } = useUser();
 
   const handleEmail = useCallback(
     (value: string) => {
@@ -76,6 +78,7 @@ export default function SignIn({
     }
 
     setTimeout(() => {
+      login({ email: email, password: password });
       setLoading(false);
       setError("");
       navigation.navigate("Profile");
@@ -119,7 +122,7 @@ export default function SignIn({
                 label={loading ? "Fazendo login..." : "Login"}
               ></Button>
             </View>
-            <Text style={{ textAlign: "center", marginTop: 5 }}>
+            <Text style={{ textAlign: "center", marginTop: 10 }}>
               Ainda não tem uma conta ?{" "}
               <Text
                 style={{ color: "blue" }}

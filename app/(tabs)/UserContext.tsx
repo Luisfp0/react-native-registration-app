@@ -5,7 +5,7 @@ interface UserContextProps {
 }
 
 interface UserData {
-  name: string;
+  name?: string;
   email: string;
   password: string;
 }
@@ -26,7 +26,6 @@ export const UserProvider: React.FC<UserContextProps> = ({ children }) => {
   };
 
   const logout = () => {
-    // Lógica de logout
     setUser(null);
   };
 

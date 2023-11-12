@@ -23,7 +23,6 @@ export default function SignUp({
 }: NativeStackScreenProps<RootStackParamList, "SignUp">) {
   const scrollRef = useRef<JSX.Element>();
   const [name, setName] = useState("");
-  const nameParts = name.split(" ");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -95,22 +94,23 @@ export default function SignUp({
     if (error?.code === "23505") {
       setError("Usuário já existe, faça login ou recupere sua senha.");
       return false;
+    } else {
+      return true
     }
   }
 
   const createAccount = useCallback(async () => {
     setError("");
     setLoading(true);
-
+    const nameParts = name.split(" ");
     if (nameParts.length <= 1) {
-      console.log(nameParts);
       setError("Por favor, digite seu nome completo.");
       setLoading(false);
       return;
     }
 
     if (!validateEmail(email)) {
-      setLoading(false);
+      setLoading(false); 
       setError("E-mail inválido, por favor, digite um e-mail válido.");
       return;
     }
@@ -179,7 +179,7 @@ export default function SignUp({
                 label={loading ? "Criando conta..." : "Criar conta"}
               ></Button>
             </View>
-            <Text style={{ textAlign: "center", marginTop: 5 }}>
+            <Text style={{ textAlign: "center", marginTop: 10 }}>
               Já tem uma conta ?{" "}
               <Text
                 style={{ color: "blue" }}

@@ -2,10 +2,11 @@ import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 
 type TextInputFieldProps = {
-  placeholder: string;
+  placeholder?: string;
   leftIcon?: React.ReactNode;
-  onChange: (text: string) => void;
+  onChange?: (text: string) => void;
   value: string;
+  disabled?: boolean;
 };
 
 export default function TextInputField({
@@ -13,16 +14,18 @@ export default function TextInputField({
   onChange,
   leftIcon,
   value,
+  disabled = true,
 }: TextInputFieldProps) {
   return (
     <View style={styles.container}>
       {leftIcon && <View style={styles.leftIconContainer}>{leftIcon}</View>}
       <TextInput
+        editable={disabled}
         value={value}
         autoCapitalize={"none"}
         style={styles.textInput}
         placeholder={placeholder}
-        onChangeText={(text) => onChange(text)}
+        onChangeText={(text) => onChange && onChange(text)}
         placeholderTextColor="#718096"
       />
     </View>
