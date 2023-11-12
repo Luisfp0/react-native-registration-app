@@ -14,68 +14,80 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { verifyUserEmail } from "../../utils/supa";
+import * as FileSystem from "expo-file-system";
+import { decode } from "base64-arraybuffer";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
+
+const FALLBACK_IMAGE = "http://placekitten.com/215/230";
+const IMAGE_BASE_URL =
+  "https://uylqvgibghcxaotkckfd.supabase.co/storage/v1/object/public/ProfileImage/";
 
 const ProfileScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, "Profile">) => {
   const { user, logout } = useUser();
   const [name, setName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [profileImage, setProfileImage] = useState(
-    "http://placekitten.com/215/230"
+    `${IMAGE_BASE_URL}${imageUrl}`
   );
-
+  
   useEffect(() => {
     const fetchData = async () => {
       if (user?.email) {
-        const userName = await verifyUserEmail(user.email);
-        setName(userName?.name);
+        const _user = await verifyUserEmail(user.email);
+        setName(_user?.name);
+        setImageUrl(_user?.image_url);
+        setProfileImage(`${IMAGE_BASE_URL}${_user?.image_url}`);
       }
     };
 
     fetchData();
   }, []);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+  const onSelectImage = async () => {
+    const options: ImagePicker.ImagePickerOptions = {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    console.log({ result: result.assets[0] });
+    };
+
+    const result = await ImagePicker.launchImageLibraryAsync(options);
     if (!result.canceled) {
       if (result.assets[0]) {
         setProfileImage(result.assets[0].uri);
-        uploadImage(result.assets[0].uri);
       }
     }
-  };
 
-  const fetchImageFromUri = async (uri) => {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    return blob;
-  };
-
-
-  const uploadImage = async (uri: string) => {
-    try {
-      const image = await fetchImageFromUri(uri)
-      const { data, error } = await supabase.storage
+    if (!result.canceled) {
+      const img = result.assets[0];
+      if (img) {
+        setProfileImage(img.uri);
+      }
+      const base64 = await FileSystem.readAsStringAsync(img.uri, {
+        encoding: "base64",
+      });
+      const filePath = `/public/${uuidv4()}.jpeg`;
+      const contentType = "image/jpeg";
+      await supabase.storage
         .from("ProfileImage")
-        .upload("/public/teste.jpeg", image, {
+        .upload(filePath, decode(base64), {
+          contentType,
           cacheControl: "3600",
           upsert: true,
         });
+      await supabase
+        .from("users")
+        .update({ image_url: filePath })
+        .eq("email", user?.email);
 
-      if (error) {
-        console.error("Error uploading image:", error);
-      } else {
-        console.log("Image uploaded successfully:", data);
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
+      setImageUrl(`${IMAGE_BASE_URL}${filePath}`);
     }
+  };
+
+  const removeImage = async () => {
+    const filePath = `public/${user?.email}.jpeg`;
+    return await supabase.storage.from("ProfileImage").remove([filePath]);
   };
 
   const deleteAccount = () => {
@@ -90,6 +102,7 @@ const ProfileScreen = ({
         {
           text: "Excluir",
           onPress: async () => {
+            await removeImage();
             await supabase.from("users").delete().eq("email", user?.email);
             logout();
             navigation.navigate("SignUp");
@@ -116,9 +129,13 @@ const ProfileScreen = ({
       <View style={styles.profileContainer}>
         <View style={styles.imageContainer}>
           <View style={styles.shapeImage}>
-            <Image style={styles.profileImage} source={{ uri: profileImage }} />
+            <Image
+              style={styles.profileImage}
+              source={{ uri: profileImage }}
+              onError={() => setProfileImage(FALLBACK_IMAGE)}
+            />
           </View>
-          <TouchableOpacity style={styles.switchImage} onPress={pickImage}>
+          <TouchableOpacity style={styles.switchImage} onPress={onSelectImage}>
             <Entypo name="camera" size={25} color="white" />
           </TouchableOpacity>
         </View>

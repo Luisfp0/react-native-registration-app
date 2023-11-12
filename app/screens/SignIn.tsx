@@ -5,14 +5,13 @@ import PasswordInput from "../../components/PasswordInput";
 import { Foundation, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import TextInputField from "../../components/TextInputField";
-import { supabase } from "../../config/initSupabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Logo } from "../../components/Logo";
 import { Button } from "../../components/Button";
 import { RootStackParamList } from "../../navigation/types";
 import { validateEmail } from "../../utils/email";
 import { useUser } from "./UserContext";
-import { verifyUserEmail, verifyUserEmailAndPassword } from "../../utils/supa";
+import { verifyUserEmailAndPassword } from "../../utils/supa";
 
 export default function SignIn({
   navigation,
@@ -49,7 +48,7 @@ export default function SignIn({
       return;
     }
 
-    const user = await verifyUserEmailAndPassword(email, password);
+    const user = await verifyUserEmailAndPassword(email.trim(), password);
     if (!user) {
       setLoading(false);
       setError(

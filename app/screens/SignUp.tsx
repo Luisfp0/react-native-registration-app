@@ -21,7 +21,6 @@ import { useUser } from "./UserContext";
 export default function SignUp({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, "SignUp">) {
-  const scrollRef = useRef<JSX.Element>();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -132,7 +131,7 @@ export default function SignUp({
       return;
     }
 
-    if (!(await insertUser({ email, name, password }))) {
+    if (!(await insertUser({ email: email.trim(), name, password }))) {
       setLoading(false);
       return;
     }
@@ -154,9 +153,6 @@ export default function SignUp({
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
         <KeyboardAwareScrollView
-          innerRef={(ref) => {
-            scrollRef.current = ref;
-          }}
           style={styles.keyboardAware}
           showsVerticalScrollIndicator={false}
         >

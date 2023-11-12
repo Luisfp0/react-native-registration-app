@@ -3,7 +3,7 @@ import { supabase } from "../config/initSupabase";
 export const verifyUserEmail = async (email: string) => {
   const { data } = await supabase
     .from("users")
-    .select("name")
+    .select("name, image_url")
     .eq("email", email)
     .single();
 

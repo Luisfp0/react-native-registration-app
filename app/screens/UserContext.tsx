@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-interface UserContextProps {
+type UserContextProps = {
   children: ReactNode;
 }
 
-interface UserData {
+type UserData = {
   name?: string;
   email: string;
   password: string;
 }
 
-interface UserContextValue {
+type UserContextValue = {
   user: UserData | null;
   login: (userData: UserData) => void;
   logout: () => void;

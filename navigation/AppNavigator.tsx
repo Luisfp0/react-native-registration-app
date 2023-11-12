@@ -1,11 +1,11 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SignUp from "../app/(tabs)/SignUp";
-import SignIn from "../app/(tabs)/SignIn";
-import Profile from "../app/(tabs)/Profile";
+import SignUp from "../app/screens/SignUp";
+import SignIn from "../app/screens/SignIn";
+import Profile from "../app/screens/Profile";
 import { RootStackParamList } from "./types";
-import { UserProvider } from "../app/(tabs)/UserContext";
+import { UserProvider } from "../app/screens/UserContext";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
