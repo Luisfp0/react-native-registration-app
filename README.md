@@ -18,7 +18,7 @@ Upload de imagens de perfil, com opção de escolher da galeria.
 ### Integração com Supabase:
 O Supabase é utilizado para armazenar dados de usuário e imagens de perfil.
 
-## Instruções de Uso
+## Rodando o projeto localmente
 ### Clonando o Repositório
 
 ```bash
