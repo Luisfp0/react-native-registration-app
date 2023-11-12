@@ -12,8 +12,8 @@ import { supabase } from "../../config/initSupabase";
 import { RootStackParamList } from "../../navigation/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Button } from "../../components/Button";
 import * as ImagePicker from "expo-image-picker";
+import { verifyUserEmail } from "../../utils/supa";
 
 const ProfileScreen = ({
   navigation,
@@ -26,23 +26,14 @@ const ProfileScreen = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const userName = await verifyUserExists(user?.email);
-      setName(userName?.name);
+      if (user?.email) {
+        const userName = await verifyUserEmail(user.email);
+        setName(userName?.name);
+      }
     };
 
     fetchData();
   }, []);
-
-  async function verifyUserExists(email: string | undefined) {
-    const { data } = await supabase
-      .from("users")
-      .select("name")
-      .eq("email", email);
-
-    if (data?.length) {
-      return data[0];
-    }
-  }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -51,7 +42,7 @@ const ProfileScreen = ({
       aspect: [4, 3],
       quality: 1,
     });
-
+    console.log({ result: result.assets[0] });
     if (!result.canceled) {
       if (result.assets[0]) {
         setProfileImage(result.assets[0].uri);
@@ -60,13 +51,21 @@ const ProfileScreen = ({
     }
   };
 
+  const fetchImageFromUri = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    return blob;
+  };
+
+
   const uploadImage = async (uri: string) => {
     try {
+      const image = await fetchImageFromUri(uri)
       const { data, error } = await supabase.storage
         .from("ProfileImage")
-        .upload("ProfileImage", uri, {
+        .upload("/public/teste.jpeg", image, {
           cacheControl: "3600",
-          upsert: false,
+          upsert: true,
         });
 
       if (error) {
@@ -218,7 +217,7 @@ const styles = StyleSheet.create({
   shapeImage: {
     width: 210,
     height: 210,
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: "#6B42F4",
     borderRadius: 150,
     overflow: "hidden",

@@ -6,7 +6,7 @@ export const Logo = () => {
     <View style={styles.logoContainer}>
       <Image
         style={styles.logoBackground}
-        source={require("../assets/images/teste.png")}
+        source={require("../assets/images/background-logo.png")}
       />
       <Image
         style={styles.logo}

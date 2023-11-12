@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View } from "react-native";
 import PasswordInput from "../../components/PasswordInput";
@@ -29,22 +29,31 @@ export default function SignUp({
   const [error, setError] = useState("");
   const { login } = useUser();
 
-  const handleName = (value: string) => {
-    setName(value);
-    setError("");
-  };
+  const handleName = useCallback(
+    (value: string) => {
+      setName(value);
+      setError("");
+    },
+    [setName, setError]
+  );
 
-  const handleEmail = (value: string) => {
-    setEmail(value);
-    setError("");
-  };
+  const handleEmail = useCallback(
+    (value: string) => {
+      setEmail(value);
+      setError("");
+    },
+    [setEmail, setError]
+  );
 
-  const handlePassword = (value: string) => {
-    setPassword(value);
-    setError("");
-  };
+  const handlePassword = useCallback(
+    (value: string) => {
+      setPassword(value);
+      setError("");
+    },
+    [setPassword, setError]
+  );
 
-  const isStrongPassword = (password: string) => {
+  const isStrongPassword = useCallback((password: string) => {
     const errors: string[] = [];
     const minLength = 8;
     const hasNumber = /\d/.test(password);
@@ -75,36 +84,35 @@ export default function SignUp({
     if (errors.length > 0) {
       return errors[0];
     }
-  };
+  }, []);
 
-  async function insertUser(email: string | undefined) {
-    const { data, error } = await supabase
-      .from("users")
-      .insert([{ name, email, password }]);
+  const insertUser = useCallback(
+    async (user: { email: string; name: string; password: string }) => {
+      const { data, error } = await supabase.from("users").insert([user]);
 
-    if (error?.code === "23505") {
-      setError("Usuário já existe, faça login ou recupere sua senha.");
-      return false;
-    } else {
-      return true;
-    }
-  }
+      if (error?.code === "23505") {
+        setError("Usuário já existe, faça login.");
+        return false;
+      } else {
+        return true;
+      }
+    },
+    []
+  );
 
-  const navigateSignIn = () => {
+  const navigateSignIn = useCallback(() => {
     setName("");
     setEmail("");
     setPassword("");
     setError("");
     navigation.navigate("SignIn");
-  };
+  }, [setName, setEmail, setPassword, setError, navigation]);
 
   const createAccount = async () => {
     setError("");
     setLoading(true);
-    console.log({ name, email, password });
 
     const parts = name.split(" ");
-    console.log({ name, parts });
     if (parts.length <= 1) {
       setError("Por favor, digite seu nome completo.");
       setLoading(false);
@@ -124,12 +132,14 @@ export default function SignUp({
       return;
     }
 
-    if (!(await insertUser(email))) {
+    if (!(await insertUser({ email, name, password }))) {
       setLoading(false);
       return;
     }
 
     setTimeout(() => {
+      // Esse setTimeOut não é necessário, coloquei apenas para mostrar o estado de carregando no botão
+      // pois a consulta está acontecendo muito rápido e não da para enxergar o estado do botão alterando.
       login({ name: name, email: email, password: password });
       setLoading(false);
       setName("");
