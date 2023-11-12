@@ -31,14 +31,12 @@ cd react-native-registration-app
 ## Instalando dependências
 
 ```bash
-npm install
+yarn
 ```
 
 ## Executando o projeto
 ### Para ambientes de desenvolvimento
 ```bash
-npm start
-ou
 yarn start
 ```
 Isso iniciará o aplicativo em um ambiente de desenvolvimento. Siga as instruções adicionais que aparecerão no console.
