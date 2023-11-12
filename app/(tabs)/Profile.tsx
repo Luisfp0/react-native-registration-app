@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import { useUser } from "./UserContext";
 import { supabase } from "../../config/initSupabase";
 import { RootStackParamList } from "../../navigation/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Button } from "../../components/Button";
-import * as ImagePicker from 'expo-image-picker';
-
+import * as ImagePicker from "expo-image-picker";
 
 const ProfileScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, "Profile">) => {
   const { user, logout } = useUser();
   const [name, setName] = useState("");
-  const [profileImage, setProfileImage] = useState("http://placekitten.com/215/230");
+  const [profileImage, setProfileImage] = useState(
+    "http://placekitten.com/215/230"
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,12 +62,11 @@ const ProfileScreen = ({
 
   const uploadImage = async (uri: string) => {
     try {
-      const { data, error } = await supabase
-        .storage
-        .from('ProfileImage')
-        .upload('ProfileImage', uri, {
-          cacheControl: '3600',
-          upsert: false
+      const { data, error } = await supabase.storage
+        .from("ProfileImage")
+        .upload("ProfileImage", uri, {
+          cacheControl: "3600",
+          upsert: false,
         });
 
       if (error) {
@@ -72,7 +79,26 @@ const ProfileScreen = ({
     }
   };
 
-
+  const deleteAccount = () => {
+    Alert.alert(
+      "Excluir Conta",
+      "Tem certeza de que deseja excluir sua conta?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Excluir",
+          onPress: async () => {
+            await supabase.from("users").delete().eq("email", user?.email);
+            logout();
+            navigation.navigate("SignUp");
+          },
+        },
+      ]
+    );
+  };
 
   function exit() {
     logout();
@@ -113,10 +139,14 @@ const ProfileScreen = ({
           <View style={styles.separator}></View>
         </View>
         <View style={styles.containerButton}>
-          <Button
-            onPress={() => navigation.navigate("Profile")}
-            label="Alterar dados"
-          ></Button>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={deleteAccount}
+          >
+            <View style={styles.button}>
+              <Text style={{ color: "white" }}>Excluir conta</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -177,6 +207,7 @@ const styles = StyleSheet.create({
   },
   containerButton: {
     marginTop: 40,
+    gap: 15,
   },
   imageContainer: {
     width: "100%",
@@ -204,9 +235,20 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   profileImage: {
-    width: '100%',
-    height: '100%'
-  }
+    width: "100%",
+    height: "100%",
+  },
+  buttonContainer: {
+    width: "100%",
+  },
+  button: {
+    width: "100%",
+    height: 50,
+    borderRadius: 50,
+    backgroundColor: "#F04747",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default ProfileScreen;

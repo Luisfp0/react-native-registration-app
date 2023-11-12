@@ -80,9 +80,11 @@ export default function SignIn({
     setTimeout(() => {
       login({ email: email, password: password });
       setLoading(false);
+      setEmail("");
+      setPassword("");
       setError("");
       navigation.navigate("Profile");
-    }, 2000);
+    }, 1000);
   };
 
   return (
@@ -108,6 +110,7 @@ export default function SignIn({
                 }
               />
               <PasswordInput
+                value={password}
                 placeholder="Senha"
                 onChange={handlePassword}
                 leftIcon={<Foundation name="lock" size={24} color="black" />}

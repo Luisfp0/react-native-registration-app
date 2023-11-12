@@ -1,35 +1,48 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-} from "react-native";
+import { View, TextInput, TouchableOpacity, StyleSheet, TextStyle, ViewStyle } from "react-native";
+
+interface PasswordInputProps {
+  placeholder: string;
+  value: string;
+  onChange: (text: string) => void;
+  leftIcon?: React.ReactNode;
+  rightIconShow?: React.ReactNode;
+  rightIconHide?: React.ReactNode;
+  containerStyle?: ViewStyle;
+  textInputStyle?: TextStyle;
+  leftIconContainerStyle?: ViewStyle;
+  rightIconContainerStyle?: ViewStyle;
+}
 
 export default function PasswordInput({
   placeholder,
+  value,
   onChange,
   leftIcon,
   rightIconShow,
   rightIconHide,
-}) {
+  containerStyle,
+  textInputStyle,
+  leftIconContainerStyle,
+  rightIconContainerStyle,
+}: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
-  
+
   return (
-    <View style={styles.container}>
-      {leftIcon && <View style={styles.leftIconContainer}>{leftIcon}</View>}
+    <View style={[styles.container, containerStyle]}>
+      {leftIcon && <View style={[styles.leftIconContainer, leftIconContainerStyle]}>{leftIcon}</View>}
       <TextInput
         autoCapitalize={'none'}
-        style={styles.textInput}
+        style={[styles.textInput, textInputStyle]}
         secureTextEntry={!showPassword}
         placeholder={placeholder}
         onChangeText={(text) => onChange(text)}
         placeholderTextColor="#718096"
+        value={value}
       />
       <TouchableOpacity
         onPress={() => setShowPassword(!showPassword)}
-        style={styles.rightIconContainer}
+        style={[styles.rightIconContainer, rightIconContainerStyle]}
       >
         {showPassword ? rightIconShow : rightIconHide}
       </TouchableOpacity>
@@ -47,7 +60,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 1,
     top: 12,
-    left: 15
+    left: 15,
   },
   rightIconContainer: {
     position: "absolute",

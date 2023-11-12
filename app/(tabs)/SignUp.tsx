@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View } from "react-native";
 import PasswordInput from "../../components/PasswordInput";
@@ -29,29 +29,20 @@ export default function SignUp({
   const [error, setError] = useState("");
   const { login } = useUser();
 
-  const handleName = useCallback(
-    (value: string) => {
-      setName(value);
-      setError("");
-    },
-    [setName, setError]
-  );
+  const handleName = (value: string) => {
+    setName(value);
+    setError("");
+  };
 
-  const handleEmail = useCallback(
-    (value: string) => {
-      setEmail(value);
-      setError("");
-    },
-    [setEmail, setError]
-  );
+  const handleEmail = (value: string) => {
+    setEmail(value);
+    setError("");
+  };
 
-  const handlePassword = useCallback(
-    (value: string) => {
-      setPassword(value);
-      setError("");
-    },
-    [setPassword, setError]
-  );
+  const handlePassword = (value: string) => {
+    setPassword(value);
+    setError("");
+  };
 
   const isStrongPassword = (password: string) => {
     const errors: string[] = [];
@@ -95,22 +86,33 @@ export default function SignUp({
       setError("Usuário já existe, faça login ou recupere sua senha.");
       return false;
     } else {
-      return true
+      return true;
     }
   }
 
-  const createAccount = useCallback(async () => {
+  const navigateSignIn = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setError("");
+    navigation.navigate("SignIn");
+  };
+
+  const createAccount = async () => {
     setError("");
     setLoading(true);
-    const nameParts = name.split(" ");
-    if (nameParts.length <= 1) {
+    console.log({ name, email, password });
+
+    const parts = name.split(" ");
+    console.log({ name, parts });
+    if (parts.length <= 1) {
       setError("Por favor, digite seu nome completo.");
       setLoading(false);
       return;
     }
 
     if (!validateEmail(email)) {
-      setLoading(false); 
+      setLoading(false);
       setError("E-mail inválido, por favor, digite um e-mail válido.");
       return;
     }
@@ -130,10 +132,13 @@ export default function SignUp({
     setTimeout(() => {
       login({ name: name, email: email, password: password });
       setLoading(false);
+      setName("");
+      setEmail("");
+      setPassword("");
       setError("");
       navigation.navigate("Profile");
-    }, 2000);
-  }, []);
+    }, 1000);
+  };
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -164,6 +169,7 @@ export default function SignUp({
                 }
               />
               <PasswordInput
+                value={password}
                 placeholder="Senha"
                 onChange={handlePassword}
                 leftIcon={<Foundation name="lock" size={24} color="black" />}
@@ -181,10 +187,7 @@ export default function SignUp({
             </View>
             <Text style={{ textAlign: "center", marginTop: 10 }}>
               Já tem uma conta ?{" "}
-              <Text
-                style={{ color: "blue" }}
-                onPress={() => navigation.navigate("SignIn")}
-              >
+              <Text style={{ color: "blue" }} onPress={navigateSignIn}>
                 Faça o login
               </Text>
             </Text>
