@@ -12,6 +12,7 @@ import { Button } from "../../components/Button";
 import { RootStackParamList } from "../../navigation/types";
 import { validateEmail } from "../../utils/email";
 import { useUser } from "./UserContext";
+import { verifyUserEmail, verifyUserEmailAndPassword } from "../../utils/supa";
 
 export default function SignIn({
   navigation,
@@ -39,20 +40,6 @@ export default function SignIn({
     [setPassword, setError]
   );
 
-  const verifyUserExists = useCallback(
-    async (email: string, password: string) => {
-      const { data } = await supabase
-        .from("users")
-        .select("email, password")
-        .eq("email", email.toLowerCase())
-        .eq("password", password)
-        .single();
-
-      return data;
-    },
-    []
-  );
-
   const signIn = async () => {
     setLoading(true);
 
@@ -62,14 +49,8 @@ export default function SignIn({
       return;
     }
 
-    const user = await verifyUserExists(email, password);
-    if (user) {
-      if (user.password !== password) {
-        setLoading(false);
-        setError("E-mail ou senha incorretos.");
-        return;
-      }
-    } else {
+    const user = await verifyUserEmailAndPassword(email, password);
+    if (!user) {
       setLoading(false);
       setError(
         "E-mail/senha incorretos, ou o Usuário não existe, verifique os dados ou crie uma conta."
@@ -78,6 +59,8 @@ export default function SignIn({
     }
 
     setTimeout(() => {
+      // Esse setTimeOut não é necessário, coloquei apenas para mostrar o estado de carregando no botão
+      // pois a consulta está acontecendo muito rápido e não da para enxergar o estado do botão alterando.
       login({ email: email, password: password });
       setLoading(false);
       setEmail("");
