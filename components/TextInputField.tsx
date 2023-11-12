@@ -1,17 +1,24 @@
-import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-} from "react-native";
+import React from "react";
+import { View, TextInput, StyleSheet } from "react-native";
 
-export default function TextInputField({ placeholder, onChange, leftIcon }) {
+type TextInputFieldProps = {
+  placeholder: string;
+  leftIcon?: React.ReactNode;
+  onChange: (text: string) => void;
+  value: string;
+};
+
+export default function TextInputField({
+  placeholder,
+  onChange,
+  leftIcon,
+  value,
+}: TextInputFieldProps) {
   return (
     <View style={styles.container}>
       {leftIcon && <View style={styles.leftIconContainer}>{leftIcon}</View>}
       <TextInput
+        value={value}
         autoCapitalize={"none"}
         style={styles.textInput}
         placeholder={placeholder}
