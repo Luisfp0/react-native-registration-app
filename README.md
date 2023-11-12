@@ -28,14 +28,13 @@ git clone https://github.com/Luisfp0/react-native-registration-app.git
 
 cd react-native-registration-app
 ```
-## Instalando dependências
+### Instalando dependências
 
 ```bash
 yarn
 ```
 
-## Executando o projeto
-### Para ambientes de desenvolvimento
+### Executando o projeto
 ```bash
 yarn start
 ```
