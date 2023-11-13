@@ -1,8 +1,8 @@
-<h1> :rocket: Processo seletivo Academia do Desenvolvedor :rocket:</h1>
+<h1> :rocket: Processo seletivo Academia do Desenvolvedor</h1>
 
 <h2> :writing_hand:Descrição</h1>
 
-O projeto é um aplicativo móvel desenvolvido em React Native, utilizando a biblioteca Expo. Ele oferece funcionalidades de autenticação, permitindo que os usuários realizem login, criem contas e acessem seus perfis. A navegação entre telas é gerenciada pelo React Navigation. Para o backend foi utilizado o supabase, pois já tenho familiaridade com o seu funcionamento e ele dipõe de banco de dados e do storage para salvar arquivos.
+O projeto é um aplicativo móvel desenvolvido em React Native, utilizando a biblioteca Expo. Ele oferece funcionalidades de autenticação, permitindo que os usuários realizem login, criem contas e acessem seus perfis. A navegação entre telas é gerenciada pelo React Navigation. Para o backend foi utilizado o supabase, pois já tenho familiaridade com o seu funcionamento e ele dispõe de banco de dados e do storage para salvar arquivos.
 
 <h1 > :gear: Funcionalidades Principais</h1>
 
@@ -34,7 +34,7 @@ O Supabase é utilizado para armazenar todos os dados do usuário em um banco de
 
 
 <h2>🔧 Rodando o projeto localmente</h2>
-<h3>🔧 Clonando o Repositório</h3>
+<h3> Clonando o Repositório</h3>
 
 ```bash
 git clone git@github.com:Luisfp0/react-native-registration-app.git
